@@ -19,8 +19,8 @@ def seq_collate(data):
     seq_start_end = [[start, end]
                      for start, end in zip(cum_start_idx, cum_start_idx[1:])]
 
-    # Data format: batch, input_size, seq_len
-    # LSTM input format: seq_len, batch, input_size
+    # Data format: batch, input_size(x,y), seq_len
+    # LSTM input format: seq_len, batch, input_size(x,y)
     obs_traj = torch.cat(obs_seq_list, dim=0).permute(2, 0, 1)
     pred_traj = torch.cat(pred_seq_list, dim=0).permute(2, 0, 1)
     obs_traj_rel = torch.cat(obs_seq_rel_list, dim=0).permute(2, 0, 1)
@@ -180,6 +180,7 @@ class TrajectoryDataset(Dataset):
 
     def __getitem__(self, index):
         start, end = self.seq_start_end[index]
+        
         out = [
             self.obs_traj[start:end, :], self.pred_traj[start:end, :],
             self.obs_traj_rel[start:end, :], self.pred_traj_rel[start:end, :],
