@@ -13,7 +13,7 @@ from sgan.losses import displacement_error, final_displacement_error
 from sgan.utils import relative_to_abs, get_dset_path
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model_path', default='models\\sgan-p-models\\01', type=str)
+parser.add_argument('--model_path', default='models/sgan-p-models/01', type=str)
 parser.add_argument('--num_samples', default=20, type=int)
 parser.add_argument('--dset_type', default='test', type=str)
 
@@ -214,7 +214,7 @@ def main(args):
     for path in paths:
         checkpoint = torch.load(path)
         generator = get_generator(checkpoint)
-        # checkpoint['args']['batch_size'] = 1
+        checkpoint['args']['batch_size'] = 1
         _args = AttrDict(checkpoint['args'])
         path = get_dset_path(_args.dataset_name, args.dset_type)
         _, loader = data_loader(_args, path)
