@@ -93,3 +93,14 @@ def relative_to_abs(rel_traj, start_pos):
     start_pos = torch.unsqueeze(start_pos, dim=1)
     abs_traj = displacement + start_pos
     return abs_traj.permute(1, 0, 2)
+
+def abs_to_relative(abs_traj):
+    """
+    Inputs:
+    - abs_traj: numpy of shape (seq_len, batch, 2)
+    Outputs:
+    - rel_traj: numpy of shape (seq_len, batch, 2)
+    """
+    rel_traj = np.zeros(abs_traj.shape, dtype=np.float32)
+    rel_traj[1:, :, :] = abs_traj[1:, :, :] - abs_traj[:-1, :, :]
+    return rel_traj
