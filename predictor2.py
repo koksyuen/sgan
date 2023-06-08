@@ -41,9 +41,10 @@ def get_generator(checkpoint):
 
 
 class socialGAN(object):
-    def __init__(self, model_path='models/sgan-p-models/eth_8_model.pt'):
-        checkpoint = torch.load(model_path)
-        self.generator = get_generator(checkpoint)
+    def __init__(self, model):
+        # checkpoint = torch.load(model_path)
+        self.generator = model
+        print('sub generator id: {}'.format(id(self.generator)))
 
     def __call__(self, np_obs_traj):
         """

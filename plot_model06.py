@@ -168,7 +168,6 @@ def evaluate(args, loader, generator, num_samples):
     with torch.no_grad():
         nn=0
         for id, batch in enumerate(loader):
-        for id, batch in enumerate(loader):
             nn += 1
             if id == 1:
                 # 只取一个batch
@@ -216,7 +215,7 @@ def main(args):
     for path in paths:
         checkpoint = torch.load(path)
         generator = get_generator(checkpoint)
-        checkpoint['args']['batch_size'] = 1 # set batch size to 1 (for inference)
+        # checkpoint['args']['batch_size'] = 1 # set batch size to 1 (for inference)
         _args = AttrDict(checkpoint['args'])
         path = get_dset_path(_args.dataset_name, args.dset_type)
         _, loader = data_loader(_args, path)
