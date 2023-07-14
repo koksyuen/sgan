@@ -94,6 +94,17 @@ def relative_to_abs(rel_traj, start_pos):
     abs_traj = displacement + start_pos
     return abs_traj.permute(1, 0, 2)
 
+def torch_abs_to_relative(abs_traj):
+    """
+    Inputs:
+    - abs_traj: tensor of shape (seq_len, batch, 2)
+    Outputs:
+    - rel_traj: tensor of shape (seq_len, batch, 2)
+    """
+    rel_traj = torch.zeros(abs_traj.shape, dtype=torch.float32, device='cuda')
+    rel_traj[1:, :, :] = abs_traj[1:, :, :] - abs_traj[:-1, :, :]
+    return rel_traj
+
 def abs_to_relative(abs_traj):
     """
     Inputs:
