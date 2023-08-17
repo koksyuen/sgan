@@ -37,15 +37,19 @@ def get_generator(checkpoint):
     generator.cuda()
     # generator.train()
     generator.eval()
+
+    for param in generator.parameters():
+        param.requires_grad = False
+
     return generator
 
 
 class socialGAN(object):
-    def __init__(self, model_path='models/sgan-p-models/eth_8_model.pt'):
+    def __init__(self, model_path='../sgan/models/sgan-p-models/eth_8_model.pt'):
         checkpoint = torch.load(model_path)
         self.generator = get_generator(checkpoint)
 
-    def __call__(self, np_obs_traj):
+    def __call__(self, obs_traj, seq_start_end):
         """
         Inputs:
         - np_obs_traj: numpy of shape (seq_len, batch, 2)
@@ -53,15 +57,9 @@ class socialGAN(object):
         - np_pred_traj: numpy of shape (seq_len, batch, 2)
         """
         with torch.no_grad():  # Inference
-            # relative trajectory
-            # np_obs_traj_rel = abs_to_relative(np_obs_traj)
-            # number of pedestrian
-            num_of_pedestrian = [[0, np_obs_traj.shape[1]]]
 
             ### Convert from numpy to tensor
-            obs_traj = torch.from_numpy(np_obs_traj).cuda()
             obs_traj_rel = torch_abs_to_relative(obs_traj)
-            seq_start_end = torch.tensor(num_of_pedestrian).cuda()
 
             # print('obs: {}, rel: {}, seq: {}'.format(obs_traj.dtype, obs_traj_rel.dtype, seq_start_end.dtype))
 
@@ -78,6 +76,4 @@ class socialGAN(object):
                 pred_traj_rel, obs_traj[-1]
             )
 
-            np_pred_traj = pred_traj.cpu().numpy()
-
-        return np_pred_traj
+        return pred_traj
