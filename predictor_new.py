@@ -38,6 +38,7 @@ def get_generator(checkpoint):
     # generator.train()
     generator.eval()
 
+    # fixed the parameter of SocialGAN model
     for param in generator.parameters():
         param.requires_grad = False
 
